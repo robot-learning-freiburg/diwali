@@ -1,0 +1,4 @@
+_target_: lumos.utils.callbacks.WMCustomModelCheckpoint
+savepoints: [100000, 200000, 300000, 400000, 500000, 700000, 900000, 1200000, 1600000, 2000000]
+dirpath: ??
+filename: "{step}.ckpt"

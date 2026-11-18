@@ -1,0 +1,16 @@
+_target_: lumos.datasets.base_wm_disk_dataset.BaseWMDiskDataset
+key: "vis"
+save_format: "npz"
+use_cached_data: ${datamodule.use_cached_data}
+reset_prob: ${datamodule.reset_prob}
+min_window_size: ${datamodule.seq_len}
+max_window_size: ${datamodule.seq_len}
+proprio_state: ${datamodule.proprioception_dims}
+obs_space: ${datamodule.observation_space}
+points_displacement_data_dir: null
+action_chunk_size: ${datamodule.action_chunk_size}
+max_pad_size: 0
+for_wm: true
+lang_folder: ""
+num_workers: ${datamodule.num_workers}
+index_file: "ep_start_end_ids.npy"

@@ -1,0 +1,6 @@
+data_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_64
+index_file: ep_start_end_ids.npy
+target_index_file: auto_lang_ann.npy
+expert_task_name: "open_drawer"
+expert_task_lang_prompt: "Open the drawer"
+  

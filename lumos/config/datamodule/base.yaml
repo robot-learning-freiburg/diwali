@@ -1,0 +1,25 @@
+defaults:
+  - datasets: base_vision
+  - transforms: wm_basic
+  - proprioception_dims: robot_full
+  - batch_sampler: equidistant
+  - observation_space: rgb_static_gripper_rel_act
+
+_target_: lumos.datasets.base_data_module.BaseDataModule
+_recursive_: false
+root_data_dir: ${root}/dataset/task_D_D_64
+action_chunk_data_dir: ${root}/dataset/task_D_D_ac5
+points_displacement_data_dir: ${root}/dataset/task_D_D_pd
+action_chunk_size: 1
+action_space: ${mul:${.action_chunk_size}, ${.action_dim}}
+action_dim: 7
+action_max: [1., 1., 1., 1., 1., 1., 1.,]
+action_min: [-1., -1., -1., -1., -1., -1., -1]
+shuffle_val: false
+load_feats: false
+use_cached_data: false
+
+reset_prob: 0.01
+train_batch_size: 50
+val_batch_size: 50
+seq_len: 50

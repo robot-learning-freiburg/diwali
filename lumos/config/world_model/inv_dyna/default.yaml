@@ -1,0 +1,9 @@
+_target_: lumos.world_models.decoders.gaussian_decoder.MLP
+_recursive_: false
+
+in_dim: ???  
+out_dim: ${world_model.latent_action_dim}
+mlp_layers: [1024, 512, 256, 256, 256, 256, 256, 256]
+layer_norm: true
+activation: elu
+dropout: 0.0

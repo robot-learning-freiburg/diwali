@@ -1,0 +1,23 @@
+defaults:
+  - encoder: sa_encoder
+  - decoder: cnn_decoder_64
+  - action_decoder: ../inv_dyna/decoder_mlp.yaml
+  - fuser: fuser
+  - inv_dyna: gaussian
+  - rssm: default
+  - amp: default
+  - optimizer: adamw
+  - loss: default
+
+_target_: lumos.world_models.dreamer_v2_clam.DreamerV2
+_recursive_: false
+name: dreamer_v2_clam
+train_batch_size: ${datamodule.train_batch_size}
+val_batch_size: ${datamodule.val_batch_size}
+rebalance_loss: false
+
+use_gripper_camera: ${datamodule.use_gripper_camera}
+with_proprio: false
+robot_dim: ${datamodule.proprioception_dims.n_state_obs}
+latent_action_dim: 128
+cond_action_decoder_on_latent: false

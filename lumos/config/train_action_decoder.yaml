@@ -1,0 +1,33 @@
+defaults:
+  - setup
+  - tensor_cores
+  - callbacks: action_decoder
+  - datamodule: task_d_d
+  - world_model: dreamer_v2_ofla_action_decoder
+  - trainer: wm_default
+  - logger: wandb
+  - _self_
+
+  - override hydra/job_logging: colorlog
+  - override hydra/hydra_logging: colorlog
+
+script: action_decoder
+wm_path: ${log_dir}/runs/b/last_326.ckpt
+action_decoder_ckpt_path: ${log_dir}/runs/b/lowest_action_decoder.pt
+
+trainer:
+  max_steps: 50000
+  log_every_n_steps: 400
+  check_val_every_n_epoch: 10
+
+hydra:
+  run:
+    dir: ${log_dir}/runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: ${log_dir}/runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.override_dirname}
+  job:
+    config:
+      override_dirname:
+        exclude_keys:
+          - log_dir

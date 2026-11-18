@@ -1,0 +1,6 @@
+_target_: lumos.world_models.encoders.sa_encoder.SAEncoder
+cnn_depth: 48
+kernels: [4, 4, 4, 4]
+strides: [2, 2, 2, 2]
+paddings: [0, 0, 0, 0]
+activation: elu

@@ -1,0 +1,15 @@
+input_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_64/
+output_dir: ${oc.env:DIWALI_DATA_DIR}/expert/${dataset_name}/
+features_file_path: ${oc.env:DIWALI_DATA_DIR}/features/${wm_type}/training/${features_name}.pkl
+lang_ann_file:
+  training: auto_lang_ann_${data_type}.npy
+skills_list: ["open_drawer", "close_drawer", "move_slider_left", "move_slider_right", "turn_on_lightbulb", "turn_off_lightbulb", "turn_on_led", "turn_off_led", "push_pink_block_left", "lift_pink_block_table", "rotate_pink_block_left"]
+fields_to_extract: ["features", "rel_actions", "robot_obs", "scene_obs"]
+n_episodes: -1 # Randomly chosen, use -1 for all episodes
+step_len: 1
+seed: 42
+
+features_name: features_900K
+wm_type: DIWA
+dataset_name: feat-DIWA-900k-franka-all
+data_type: franka # franka or arm

@@ -1,0 +1,11 @@
+kl_balance: 0.8
+kl_weight: 0.3
+image_weight: 1.0
+of_weight: 0.2
+of_smooth_weight: 0.01
+of_sg_ratio: 0.66
+pf_weight: 1.0
+pf_static_weight: 1.0
+pf_gripper_weight: 0.1
+act_weight: 1.0
+grad_clip: 100.0

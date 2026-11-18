@@ -1,0 +1,18 @@
+defaults:
+  - dcd_action: ../inv_dyna/decoder_mlp
+  - amp: default
+  - optimizer: adamw
+  - optimizer@scheduler: adamw_scheduler
+  - loss: default
+  - _self_
+
+_target_: lumos.world_models.action_decoder_from_feats.ActionDecoderFromFeatsLatOnly
+_recursive_: false
+name: action_decoder_from_feats_lat_only
+train_batch_size: ${datamodule.train_batch_size}
+val_batch_size: ${datamodule.val_batch_size}
+
+latent_action_dim: 128
+
+dcd_action:
+  mlp_dims: [256, 256, 256]

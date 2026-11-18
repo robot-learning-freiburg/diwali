@@ -1,0 +1,7 @@
+input_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_64/
+output_dir: ${oc.env:DIWALI_DATA_DIR}/expert/calvin-validation-starts/
+skills_list: ["open_drawer", "close_drawer", "move_slider_left", "move_slider_right", "turn_on_lightbulb", "turn_off_lightbulb", "turn_on_led", "turn_off_led", "push_pink_block_left", "lift_pink_block_table", "rotate_pink_block_left"]
+fields_to_extract: ["robot_obs", "scene_obs"]
+save_start_length: 1
+step_len: 1
+seed: 42

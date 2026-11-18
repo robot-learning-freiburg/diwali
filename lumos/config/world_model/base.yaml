@@ -1,0 +1,16 @@
+defaults:
+  - encoder: cnn_encoder_64
+  - decoder: cnn_decoder_64
+  - inv_dyna: none
+  - fuser: fuser
+  - rssm: default
+  - amp: default
+  - optimizer: adamw
+  - loss: default
+
+_target_: lumos.world_models.dreamer_v2.DreamerV2
+_recursive_: false
+name: dreamer_v2
+train_batch_size: ${datamodule.train_batch_size}
+val_batch_size: ${datamodule.val_batch_size}
+rebalance_loss: false

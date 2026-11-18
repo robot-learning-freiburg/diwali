@@ -1,0 +1,9 @@
+_target_: lumos.world_models.decoders.gaussian_decoder.GaussianDecoder
+in_dim: 2176
+hidden_size: [256, 256, 128, 128]
+layer_norm: false
+activation: elu
+out_features: ${datamodule.action_space}
+log_std_min: -5.0
+log_std_max: 2.0
+mean_layers: [128, 128]

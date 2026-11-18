@@ -1,0 +1,6 @@
+_target_: lumos.world_models.decoders.gaussian_decoder.MLP
+in_dim: 2176
+out_dim: ${datamodule.action_space}
+mlp_layers: [1024, 512, 512, 256, 256]
+layer_norm: true
+activation: elu

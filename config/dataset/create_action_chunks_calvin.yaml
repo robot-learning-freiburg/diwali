@@ -1,0 +1,4 @@
+input_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_64
+output_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_ac5
+action_chunk_size: 1
+n_digits: 6

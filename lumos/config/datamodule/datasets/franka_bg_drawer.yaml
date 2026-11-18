@@ -1,0 +1,8 @@
+defaults:
+  - wm_disk_dataset: base
+
+root_data_dir: ${data_dir}/calvin/task_D_D_bgfranka_rgb64_rot6d
+action_mask_prob: 
+  train: 1.0
+  val: 0.0
+pseudo_masked_val_act: False
