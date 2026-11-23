@@ -1,0 +1,15 @@
+defaults:
+  - setup
+  - datamodule: visualize
+
+datamodule:
+  datasets:
+    visual:
+      root_data_dir: ${data_dir}/calvin/task_D_D_rgb64_rot6d
+      wm_disk_dataset:
+        max_pad_size: 49
+
+wm: null
+# wm:
+#   wm_path: "logs/runs/a/last_326.ckpt"
+#   feature_file: ${datamodule.datasets.visual.root_data_dir}/training/features_a_326.pkl

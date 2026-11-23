@@ -1,0 +1,122 @@
+import logging
+import pickle
+from typing import Any
+
+import numpy as np
+from tqdm import tqdm
+
+from lumos.datasets.base_wm_disk_dataset import BaseWMDiskDataset, load_npz
+
+logger = logging.getLogger(__name__)
+
+
+class VisionWMDiskDataset(BaseWMDiskDataset):
+    """
+    Dataset that loads episodes as individual files from disk.
+
+    Args:
+        skip_frames: Skip this amount of windows for language dataset.
+        save_format: File format in datasets_dir (pkl or npz).
+        pretrain: Set to True when pretraining.
+    """
+
+    def __init__(
+        self,
+        *args: Any,
+        reset_prob: float = 0.05,
+        skip_frames: int = 1,
+        save_format: str = "npz",
+        pretrain: bool = False,
+        use_cached_data: bool = False,
+        action_chunk_size: int = 1,
+        **kwargs: Any,
+    ):
+        super().__init__(
+            *args,
+            reset_prob=reset_prob,
+            skip_frames=skip_frames,
+            save_format=save_format,
+            pretrain=pretrain,
+            use_cached_data=False,
+            action_chunk_size=action_chunk_size,
+            **kwargs,
+        )
+        # Preloading is different for LIBERO compared to CALVIN
+        self.use_cached_data = use_cached_data
+        if self.use_cached_data:
+            self.preloaded_data = {}  # Initialize as a dictionary
+            self.preloaded_data_action_chunk = {}  # Initialize as a dictionary
+            self.preloaded_data_p_disp = {}  # Initialize as a dictionary
+            self.preload_dataset(
+                self.abs_datasets_dir / "cached_data.pkl",
+                self.abs_action_chunk_data_dir / "cached_data.pkl",
+                self.abs_points_displacement_data_dir / "cached_data.pkl" if self.points_displacement else None
+            )
+
+
+    def preload_dataset(self, cached_data_path, cached_data_path_action_chunk, cached_data_path_points_displacement):
+        """Preloads the entire dataset into memory."""
+        if cached_data_path.is_file():
+            logger.info("Loading preloaded data from cache...")
+            with open(str(cached_data_path), "rb") as f:
+                self.preloaded_data = pickle.load(f)
+        else:
+            data_dir_list = sorted([item for item in self.abs_datasets_dir.iterdir()])
+            for file_path in tqdm(data_dir_list, desc="Preloading dataset"):
+                if "npz" not in file_path.suffix:
+                    continue
+
+                key = self.extract_episode_number(file_path)
+                np_obj = load_npz(file_path)
+                data = {key: np.stack([np_obj[key]]) for key, _ in np_obj.items()}
+
+                value = {
+                    "robot_obs": np.squeeze(data["robot_obs"]),
+                    "rgb_static": np.squeeze(data["rgb_static"]),
+                    "rgb_gripper": np.squeeze(data["rgb_gripper"]),
+                }
+                self.preloaded_data[key] = value
+
+            with open(str(cached_data_path), "wb") as f:
+                pickle.dump(self.preloaded_data, f)
+        logger.info("Preloaded the dataset into cache.")
+        if cached_data_path_action_chunk.is_file():
+            logger.info("Loading preloaded action chunk data from cache...")
+            with open(str(cached_data_path_action_chunk), "rb") as f:
+                self.preloaded_data_action_chunk = pickle.load(f)
+        else:
+            data_dir_list_action_chunk = sorted([item for item in self.abs_action_chunk_data_dir.iterdir()])
+            for file_path in tqdm(data_dir_list_action_chunk, desc="Preloading action chunk dataset"):
+                if "npz" not in file_path.suffix:
+                    continue
+                key = self.extract_episode_number(file_path)
+                np_obj = load_npz(file_path)
+                value = {
+                    "rel_actions": np.squeeze(np.stack([np_obj["rel_actions"]])),
+                }
+                self.preloaded_data_action_chunk[key] = value
+            with open(str(cached_data_path_action_chunk), "wb") as f:
+                pickle.dump(self.preloaded_data_action_chunk, f)
+        logger.info("Preloaded the action chunk dataset into cache.")
+        if cached_data_path_points_displacement is None:
+            return
+        if cached_data_path_points_displacement.is_file():
+            logger.info("Loading preloaded points displacement data from cache...")
+            with open(str(cached_data_path_points_displacement), "rb") as f:
+                self.preloaded_data_p_disp = pickle.load(f)
+        else:
+            data_dir_list_points_displacement = sorted([item for item in self.abs_points_displacement_data_dir.iterdir()])
+            for file_path in tqdm(data_dir_list_points_displacement, desc="Preloading points displacement dataset"):
+                if "npz" not in file_path.suffix:
+                    continue
+                key = self.extract_episode_number(file_path)
+                np_obj = load_npz(file_path)
+                data = {key: np.stack([np_obj[key]]) for key, _ in np_obj.items()}
+                value = {
+                    "rgb_static": np.squeeze(data["rgb_static"]),
+                    "rgb_gripper": np.squeeze(data["rgb_gripper"]),
+                }
+                self.preloaded_data_p_disp[key] = value
+            with open(str(cached_data_path_points_displacement), "wb") as f:
+                pickle.dump(self.preloaded_data_p_disp, f)
+        logger.info("Preloaded the points displacement dataset into cache.")

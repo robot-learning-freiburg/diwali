@@ -1,0 +1,28 @@
+defaults:
+  - datasets@datasets.franka: half_franka
+  - transforms: wm_basic
+  - proprioception_dims: robot_full
+  - batch_sampler: equidistant
+  - observation_space: rgb_static_gripper_rel_act_p_disp
+
+_target_: lumos.datasets.base_group_data_module.GroupDataModule
+_recursive_: false
+
+num_workers: 8
+
+shuffle_val: false
+load_feats: false
+use_cached_data: true
+
+train_batch_size: 50
+val_batch_size: 50
+seq_len: 50
+
+# no need to change to 128, it is done on the world model side
+action_chunk_size: 5
+action_space: ${mul:${.action_chunk_size}, ${.action_dim}}
+action_dim: 7
+
+reset_prob: 0.01
+
+use_gripper_camera: true

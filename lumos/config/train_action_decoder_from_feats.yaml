@@ -1,0 +1,37 @@
+defaults:
+  - setup
+  - tensor_cores
+  - callbacks: action_decoder
+  - datamodule: feats
+  - world_model: action_decoder_from_feats
+  - trainer: wm_default
+  - logger: wandb
+  - _self_
+
+  - override hydra/job_logging: colorlog
+  - override hydra/hydra_logging: colorlog
+
+script: action_decoder_from_feats
+
+trainer:
+  max_steps: 300000
+  log_every_n_steps: 1000
+  check_val_every_n_epoch: 1
+
+world_model:                                                                                                                                                         
+  optimizer:                                                                                                                                                         
+    lr: 1e-4                                                                                                                                                         
+  scheduler:                                                                                                                                                         
+    T_max: 300000
+
+hydra:
+  run:
+    dir: ${log_dir}/runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: ${log_dir}/runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.override_dirname}
+  job:
+    config:
+      override_dirname:
+        exclude_keys:
+          - log_dir

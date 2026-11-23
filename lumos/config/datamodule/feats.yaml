@@ -1,0 +1,16 @@
+_target_: lumos.datasets.feats_data_module.FeatsDataModule
+_recursive_: false
+
+train_feats_path: ${oc.env:DIWALI_DATA_DIR}/features/OF/training/features_500K.pkl
+val_feats_path: ${oc.env:DIWALI_DATA_DIR}/features/OF/validation/features_500K.pkl
+train_index_file: ${oc.env:DIWALI_DATA_DIR}/ep_start_end_ids_franka.npy
+val_index_file: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_64/validation/ep_start_end_ids.npy
+
+seq_len: 50
+train_batch_size: 50
+val_batch_size: 50
+num_workers: 8
+with_features: true
+
+# Declared so that ${datamodule.action_space} resolves in model configs
+action_space: 35   # action_chunk_size (5) * action_dim (7)

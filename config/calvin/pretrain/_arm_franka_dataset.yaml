@@ -1,0 +1,27 @@
+# @package _global_
+
+arm_dataset_name: feat-LANOF-200k-arm-all
+expert_dataset_dir_franka: ${oc.env:DIWALI_DATA_DIR}/expert/${dataset_name}
+expert_dataset_dir_arm: ${oc.env:DIWALI_DATA_DIR}/expert/${arm_dataset_name}
+
+train_dataset_path_franka: ${expert_dataset_dir_franka}/${env_name}/train.npz
+train_dataset_path_arm: ${expert_dataset_dir_arm}/${env_name}/train.npz
+
+# train_dataset_group takes priority over train_dataset for pre_diffusion_mlp_feat_vision
+train_dataset_group:
+  franka:
+    _target_: diwali.dataset.sequence.StitchedSequenceDataset
+    dataset_path: ${train_dataset_path_franka}
+    horizon_steps: ${train_dataset.horizon_steps}
+    cond_steps: ${train_dataset.cond_steps}
+    device: ${train_dataset.device}
+    actions_key: ${oc.select:train_dataset.actions_key}
+    action_dim: ${oc.select:train_dataset.action_dim}
+  arm:
+    _target_: diwali.dataset.sequence.StitchedSequenceDataset
+    dataset_path: ${train_dataset_path_arm}
+    horizon_steps: ${train_dataset.horizon_steps}
+    cond_steps: ${train_dataset.cond_steps}
+    device: ${train_dataset.device}
+    actions_key: ${oc.select:train_dataset.actions_key}
+    action_dim: ${oc.select:train_dataset.action_dim}

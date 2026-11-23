@@ -1,0 +1,6 @@
+# @package _global_
+
+defaults:
+  - /calvin/pretrain/pre_diffusion_mlp_feat_vision
+  - /calvin/pretrain/_arm_franka_dataset
+  - _self_

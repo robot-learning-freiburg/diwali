@@ -1,0 +1,9 @@
+input_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/real_64/
+output_dir: ${oc.env:DIWALI_DATA_DIR}/expert/real-training-starts/
+lang_ann_file: auto_lang_ann.npy
+skills_list: ["open_drawer", "close_drawer", "move_slider_left", "move_slider_right", "turn_on_led", "pick_block_table", "pick_block_drawer"]
+fields_to_extract: ["robot_obs", "rgb_static", "rgb_gripper"]
+save_start_length: 1
+n_episodes: -1 # -1 for all validation episodes
+step_len: 1
+seed: 42

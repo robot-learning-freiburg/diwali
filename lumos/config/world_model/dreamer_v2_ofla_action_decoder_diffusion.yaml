@@ -1,0 +1,21 @@
+defaults:
+  - encoder: sa_encoder
+  - fuser: fuser
+  - inv_dyna: gaussian
+  - rssm: default
+  - dcd_action: ../inv_dyna/decoder_diffusion
+  - amp: default
+  - optimizer: adamw
+  - optimizer@scheduler: adamw_scheduler
+  - loss: default
+
+_target_: lumos.world_models.action_decoder_only.ActionDecoderOnlyDiffusion
+_recursive_: false
+name: dreamer_v2_ofla_action_decoder_diffusion
+train_batch_size: ${datamodule.train_batch_size}
+val_batch_size: ${datamodule.val_batch_size}
+rebalance_loss: false
+
+with_proprio: false
+robot_dim: ${datamodule.proprioception_dims.n_state_obs}
+latent_action_dim: 128

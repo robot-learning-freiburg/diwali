@@ -1,0 +1,23 @@
+defaults:
+  - wm_disk_dataset@train: base
+  - wm_disk_dataset@val: base
+
+root_data_dir: ${data_dir}/calvin/task_D_D_arm_64
+root_action_chunk_data_dir: ${data_dir}/calvin/task_D_D_ac5
+root_points_displacement_data_dir: ${data_dir}/calvin/task_D_D_arm_pd
+pseudo_masked_val_act: False
+
+train:
+  dataset_dir: ${..root_data_dir}/training
+  action_chunk_data_dir: ${..root_action_chunk_data_dir}/training
+  points_displacement_data_dir: ${optional_join:${..root_points_displacement_data_dir},training}
+  index_file: "ep_start_end_ids_arm.npy"
+  cache_file: "cached_arm_half_act.pkl"
+  mask_all_actions: True
+
+val:
+  dataset_dir: ${..root_data_dir}/validation
+  action_chunk_data_dir: ${..root_action_chunk_data_dir}/validation
+  points_displacement_data_dir: ${optional_join:${..root_points_displacement_data_dir},validation}
+  index_file: "ep_start_end_ids.npy"
+  cache_file: "cached_arm.pkl"

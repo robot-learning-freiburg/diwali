@@ -1,0 +1,9 @@
+defaults:
+  - dreamer_v2_pd
+  - _self_
+
+_target_: lumos.world_models.dreamer_v2_pd_ablation.DreamerV2
+name: dreamer_v2_pd_ablation
+
+# pd_two_cam | pd_one_cam | la_no_pd | rel_action
+mode: pd_two_cam

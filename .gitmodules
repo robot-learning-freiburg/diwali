@@ -1,0 +1,4 @@
+[submodule "calvin_env"]
+    path = calvin_env
+    url = https://github.com/acl21/calvin_env
+    branch = lemon

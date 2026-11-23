@@ -1,0 +1,30 @@
+defaults:
+  - datasets@datasets.franka: half_franka_act
+  - datasets@datasets.arm: half_arm_act
+  - transforms: wm_basic
+  - proprioception_dims: robot_full
+  - batch_sampler: ac_equidistant
+  - observation_space: rgb_static_gripper_rel_act_p_disp
+
+_target_: lumos.datasets.base_group_data_module.GroupDataModule
+_recursive_: false
+
+batch_sampler:
+  init_idx: 0
+
+action_chunk_size: 5
+action_space: ${mul:${.action_chunk_size}, ${.action_dim}}
+action_dim: 7
+
+shuffle_val: false
+load_feats: false
+use_cached_data: false
+
+reset_prob: 0.0
+train_batch_size: 500
+val_batch_size: 200
+num_workers: 8
+
+seq_len: 1
+
+use_gripper_camera: true

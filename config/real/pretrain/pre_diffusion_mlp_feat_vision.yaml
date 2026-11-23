@@ -1,0 +1,111 @@
+defaults:
+  - _self_
+hydra:
+  run:
+    dir: ${logdir}
+_target_: diwali.agent.pretrain.train_diffusion_agent.TrainDiffusionAgent
+
+name: ${env_name}_pre_diffusion_mlp_feat_ta${horizon_steps}_td${denoising_steps}
+logdir: ${oc.env:DIWALI_LOG_DIR}/calvin-pretrain-feat/${name}/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
+train_dataset_path: ${oc.env:DIWALI_DATA_DIR}/expert/${dataset_name}/${env_name}/train.npz
+normalization_path: null
+
+dataset_name: feat-LANOF-700k-franka-all
+action_decoder_path: /export/home/lagandua/projects/diwali/logs/runs/2026-09-14/22-43-20/model_weights/last.ckpt
+wm_ckpt_path: ${oc.env:DIWALI_LOG_DIR}/runs/2026-09-09/10-54-56_diwali_job/model_weights/900000.ckpt
+
+seed: 42
+device: cuda:0
+env_name: close_drawer
+env_type: real
+obs_dim: 2048
+action_dim: 16
+denoising_steps: 20
+horizon_steps: 1
+cond_steps: 1
+act_steps: ${horizon_steps}
+
+comment: ""
+rgb_obs: true
+
+wandb:
+  entity: ${oc.env:DIWALI_WANDB_ENTITY}
+  project: diwali-${env_name}-pretrain
+  run: ${comment}-${now:%H-%M-%S}-${name}
+  dir: ${logdir}
+
+train:
+  n_epochs: 5000
+  batch_size: 256
+  learning_rate: 1e-4
+  weight_decay: 1e-6
+  lr_scheduler:
+    first_cycle_steps: 10000
+    warmup_steps: 100
+    min_lr: 1e-5
+  epoch_start_ema: 20
+  update_ema_freq: 10
+  save_model_freq: 1000
+  val_freq: 1000
+
+model:
+  _target_: diwali.model.diffusion.diffusion.DiffusionModel
+  predict_epsilon: True
+  denoised_clip_value: 1.0
+  network:
+    _target_: diwali.model.diffusion.mlp_diffusion.DiffusionMLP
+    time_dim: 16
+    mlp_dims: [512, 512, 512]
+    residual_style: True
+    cond_dim: ${eval:'${obs_dim} * ${cond_steps}'}
+    horizon_steps: ${horizon_steps}
+    action_dim: ${action_dim}
+  horizon_steps: ${horizon_steps}
+  obs_dim: ${obs_dim}
+  action_dim: ${action_dim}
+  denoising_steps: ${denoising_steps}
+  device: ${device}
+
+ema:
+  decay: 0.995
+
+train_dataset:
+  _target_: diwali.dataset.sequence.StitchedSequenceDataset
+  dataset_path: ${train_dataset_path}
+  horizon_steps: ${horizon_steps}
+  cond_steps: ${cond_steps}
+  device: ${device}
+  actions_key: lat_actions
+  action_dim: ${action_dim}
+
+action_decoder: 
+  ckpt_path: ${action_decoder_path}
+
+env_runner:
+  _target_: diwali.env.runner.visionwm_real.EnvRunner
+
+wm_type: "diwali"
+
+wm:
+  _target_: diwali.wm.encoder.visionwm_noact.VisionWMObsEncoder
+  ckpt_path: ${wm_ckpt_path}
+  device: ${device}
+  stats_path: ${oc.env:DIWALI_DATA_DIR}/calvin/real_64/training/statistics.yaml
+  wm_type: ${wm_type}
+
+env:
+  n_envs: 1 # For pretraining, we only need one environment (do not change this)
+  n_render: -1
+  n_eval_episodes: 5
+  render_fps: 8
+  name: ${env_name}
+  env_type: ${env_type}
+  best_reward_threshold_for_success: 1
+  max_episode_steps: 75
+  save_video: true
+  load_scene_from_dataset: null
+  # RGB start frames for WM imagination. Extract with:
+  #   python scripts/dataset/extract_validation_starts_img.py
+  eval_scene_from_dataset: ${oc.env:DIWALI_DATA_DIR}/expert/real-validation-starts/${env_name}/val_starts_1.npz
+  n_obs_steps: 1
+  n_action_steps: ${horizon_steps}

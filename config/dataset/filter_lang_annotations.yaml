@@ -1,0 +1,6 @@
+data_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_64/training
+index_file: ep_start_end_ids_arm.npy
+output_file: auto_lang_ann_arm.npy
+
+# Used for logging only
+skills_list: ["open_drawer", "close_drawer", "move_slider_left", "move_slider_right", "turn_on_lightbulb", "turn_off_lightbulb", "turn_on_led", "turn_off_led", "push_pink_block_left", "lift_pink_block_table", "rotate_pink_block_left"]

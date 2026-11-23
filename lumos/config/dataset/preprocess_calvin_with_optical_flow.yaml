@@ -1,0 +1,8 @@
+input_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_ur5_drawer
+output_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/task_D_D_ur5_drawer_rgb64_rot6d_optical_flow
+desired_keys: ['rel_actions', 'robot_obs', 'scene_obs', 'rgb_static', 'rgb_gripper']  # ['actions', 'rel_actions', 'robot_obs', 'scene_obs', 'rgb_static', 'rgb_gripper', 'rgb_tactile', 'depth_static', 'depth_gripper', 'depth_tactile']
+desired_resolution: 64
+rgb_interpolation: Area # Area for downsampling, Cubic for upsampling
+rot6d: true
+optical_flow_model: dpflow  # PTLFlow model for optical flow computation (raft_small, raft_large, etc.) 
+device: cuda  # Device to run optical flow model on (e.g., 'cuda' or 'cpu')

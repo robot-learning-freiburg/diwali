@@ -1,0 +1,5 @@
+defaults:
+  - base
+  - override transforms: wm_basic
+
+use_gripper_camera: true

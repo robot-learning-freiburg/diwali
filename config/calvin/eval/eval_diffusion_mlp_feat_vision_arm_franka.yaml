@@ -1,0 +1,17 @@
+defaults:
+  - /calvin/pretrain/pre_diffusion_mlp_feat_vision_arm_franka
+  - _self_
+
+_target_: diwali.agent.eval.eval_diffusion_agent.EvalDiffusionAgent
+name: ${env_name}_eval_diffusion_mlp_feat_ta${horizon_steps}_td${denoising_steps}
+logdir: ${oc.env:DIWALI_LOG_DIR}/calvin-eval-feat/${name}/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
+base_policy_path: ???
+env_name: open_drawer
+dataset_name: feat-900k-franka-50
+arm_dataset_name: feat-900k-arm-50
+wm_ckpt_path: ${oc.env:DIWALI_DATA_DIR}/wm/diwali/900000.ckpt
+action_decoder_path: ${oc.env:DIWALI_DATA_DIR}/wm/diwali/action_decoder.ckpt
+model:
+  _target_: diwali.model.diffusion.diffusion_eval.DiffusionEval
+  network_path: ${base_policy_path}
+  ft_denoising_steps: 0

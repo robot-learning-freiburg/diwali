@@ -1,0 +1,10 @@
+defaults:
+  - extract_expert_demos_feat
+  - _self_
+
+output_dir: ${oc.env:DIWALI_DATA_DIR}/expert/calvin-feat-decoded-lat-50/
+
+# Use decoded latent actions instead of raw rel_actions
+fields_to_extract: ["features", "lat_actions"]
+decoder_ckpt_path: ${oc.env:DIWALI_LOG_DIR}/2026-05-13/03-53-44-/model_weights/last.ckpt
+decoder_device: cpu

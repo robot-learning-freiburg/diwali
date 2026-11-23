@@ -1,0 +1,12 @@
+input_dir: ${oc.env:DIWALI_DATA_DIR}/calvin/calvin_snake_64/
+output_dir: ${oc.env:DIWALI_DATA_DIR}/expert/${dataset_name}/
+lang_ann_file:
+  training: auto_lang_ann.npy
+skills_list: ["open_drawer", "close_drawer", "move_slider_left",] #"move_slider_right", "turn_on_lightbulb", "turn_off_lightbulb", "turn_on_led", "turn_off_led", "push_pink_block_left", "lift_pink_block_table", "rotate_pink_block_left"]
+
+fields_to_extract: ["rgb_static", "rgb_gripper", "robot_obs", "rel_actions"]
+n_episodes: -1 # Randomly chosen, use -1 for all episodes
+step_len: 1
+seed: 42
+
+dataset_name: img-${n_episodes}

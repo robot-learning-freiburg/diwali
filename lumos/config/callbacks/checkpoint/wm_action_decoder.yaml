@@ -1,0 +1,4 @@
+_target_: lumos.utils.callbacks.ActionDecoderCheckpoint
+savepoints: [500000, 900000, 1200000, 1600000, 2000000]
+dirpath: ??
+filename: "{step}_action_decoder.pt"
